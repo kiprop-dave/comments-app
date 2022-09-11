@@ -2,6 +2,7 @@ import React,{useContext} from 'react';
 import styled from 'styled-components';
 import { Context } from '../context/context';
 import Comment from './comment';
+import TextReply from './textReply';
 
 //styled
 const CommentsContainer = styled.div `
@@ -12,6 +13,7 @@ const CommentsContainer = styled.div `
     width: 50%;
     margin-top: 3rem;
     border-radius: 10px;
+    
 `
 
 
@@ -25,6 +27,7 @@ function Comments(){
     return(
         <CommentsContainer>
             {commentElements}
+            <TextReply/>
         </CommentsContainer>
     )
 

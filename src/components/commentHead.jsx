@@ -27,6 +27,9 @@ const Header = styled.div `
         justify-content: space-between;
         cursor: pointer;
     }
+    .reply:hover{
+        opacity: 0.5;
+    }
 `
 const Paragraph = styled.p `
     font-weight: 600;
@@ -56,6 +59,9 @@ const Reply = styled.div `
     .delete{
         width: 50%;
     }
+    .delete:hover{
+        opacity:0.5;
+    }
 
     .edit{
         display: flex;
@@ -66,10 +72,13 @@ const Reply = styled.div `
     .icon{
         width: 35%
     }
+    .icon:hover{
+        opacity: 0.5;
+    }
     
 `
 
-export default function CommentHead({date,user}){
+export default function CommentHead({date,user,action}){
     const {rootUser} = useContext(Context)
 
     const {image, username} = user
@@ -86,7 +95,7 @@ export default function CommentHead({date,user}){
             <p className='date'>{date}</p>
             {
                 username !== rootUser ?
-                <div className='reply'>
+                <div className='reply' onClick={()=> action()}>
                     <img src={`/images/icon-reply.svg`} alt="reply" />
                     <Paragraph>Reply</Paragraph>
                 </div> :
