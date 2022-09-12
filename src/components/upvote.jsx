@@ -23,13 +23,13 @@ const VotesCount = styled.div `
     }
 `
 
-export default function Upvotes({score}){
+export default function Upvotes({score,downvote,upvote}){
 
     return(
         <VotesCount>
-            <img src={`/images/icon-plus.svg`} alt="" className='votes'/>
+            <img src={`/images/icon-plus.svg`} alt="" className='votes'onClick={()=>upvote()}/>
             <p className='score'>{score}</p>
-            <img src={`/images/icon-minus.svg`} alt="" className='votes'/>
+            <img src={`/images/icon-minus.svg`} alt="" className='votes' onClick={()=>downvote()}/>
         </VotesCount>
     )
 }

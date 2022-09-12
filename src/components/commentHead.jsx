@@ -78,7 +78,7 @@ const Reply = styled.div `
     
 `
 
-export default function CommentHead({date,user,action}){
+export default function CommentHead({date,user,action,modal}){
     const {rootUser} = useContext(Context)
 
     const {image, username} = user
@@ -100,7 +100,7 @@ export default function CommentHead({date,user,action}){
                     <Paragraph>Reply</Paragraph>
                 </div> :
                 <Reply>
-                    <div className='edit delete'>
+                    <div className='edit delete' onClick={() => modal()}>
                         <img src="/images/icon-delete.svg" alt="delete" />
                         <DeleteParagraph>Delete</DeleteParagraph>
                     </div>

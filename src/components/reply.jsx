@@ -6,6 +6,7 @@ import { Reply as ReplyCopy } from './textReply';
 import { Context } from '../context/context';
 import Button from './button';
 import {nanoid} from 'nanoid'
+import DeleteNodal from './deleteNodal';
 
 const ReplyDiv = styled(ReplyCopy) `
     margin-left: 5%;
@@ -38,7 +39,7 @@ const Paragraph = styled.p `
 `
 
 export default function Reply({reply,commentId}){
-    const {profilePic,rootUser,createReply} = useContext(Context)
+    const {profilePic,rootUser,createReply,deleteReply,upvoteReply,downvoteReply} = useContext(Context)
     const {content,createdAt,score,replyingTo,user,showReply,id} = reply
     const [isShown, setIsShown] = useState(showReply)
     const [replyComment, setReplyComment] = useState(
@@ -63,7 +64,7 @@ export default function Reply({reply,commentId}){
         setIsShown(true)
     }
     // console.log(id)
-    function hideTextArea(event){
+    function hideTextArea(event){ // Not working yet
         if(replyComment.content.length > 0){
             createReply(event,id,replyComment)
             setIsShown(false)
@@ -77,25 +78,33 @@ export default function Reply({reply,commentId}){
             [name]: value
         }))
     }
+    const [modal, setModal] = useState(false)
+    function openModal(){
+        setModal(true)
+    }
     
     return(
         <>
         <ReplyContainer>
-            <Upvotes score={score}/>
+            <Upvotes score={score} upvote={()=>upvoteReply(id)} downvote={()=>downvoteReply(id)}/>
             <div className='details'>
-                <CommentHead user={user} date={createdAt} action={showTextArea}/>
+                <CommentHead user={user} date={createdAt} action={showTextArea} modal={openModal}/>
                 <Paragraph>
                     <span className='reply'>@{replyingTo} </span>
                     {content}    
                 </Paragraph>
             </div>
+            {
+                modal &&
+                <DeleteNodal deleteItem={()=> deleteReply(id)}/>
+            }
         </ReplyContainer>
         <ReplyDiv replying ={isShown}>
             <img src={profilePic.png} alt="" className='profile'/>
             <textarea className='textarea'
             name='content' value={replyComment.content} onChange={(e)=>handleReplyText(e)}
             />
-            <Button text={"REPLY"} action={hideTextArea}/>
+            <Button text={"REPLY"} action={hideTextArea} margin={"1rem"}/>
         </ReplyDiv>
         </>
     )

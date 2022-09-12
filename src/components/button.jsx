@@ -2,13 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Dbutton = styled.button `
-    background-color: hsl(238, 40%, 52%);
+    /* background-color: hsl(238, 40%, 52%); */
+    background-color: ${({background}) => background ? background : "hsl(238, 40%, 52%)"};
     border: none;
-    width: 5rem;
+    /* width: 5rem; */
+    width: fit-content;
+    padding: 3%;
     height: 2rem;
     display: flex;
     align-items: center;
-    margin-left: 1rem;
+    margin-left: ${({margin}) => margin ? margin : "0"};
     justify-content: center;
     color: white;
     font-weight: 600;
@@ -21,8 +24,11 @@ const Dbutton = styled.button `
     }
 `
 
-export default function Button({text,action}){
+export default function Button({text,action,margin, background}){
     return(
-        <Dbutton onClick={(e)=>action(e)}>{text}</Dbutton>
+        <Dbutton margin ={margin} onClick={(e)=>action(e)}
+        background={background}>
+            {text}
+        </Dbutton>
     )
 }

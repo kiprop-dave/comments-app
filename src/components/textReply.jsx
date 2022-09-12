@@ -35,7 +35,7 @@ export default function TextReply(){
             value={content}
             onChange={(e) => handleComment(e)}
             />
-            <Button text={"SEND"} action={createNewComment}/>
+            <Button text={"SEND"} action={createNewComment} margin={"1rem"}/>
        </Reply>
     )
 }

@@ -24,6 +24,36 @@ function ContextProvider({children}) {
             "replies": []
         }
     )
+
+    const [isDeleting, setIsDeleting] = useState(false) // state for showing the delete nodal
+
+    function openNodal(){ // function to open the nodal page, used by the delete icon
+        setIsDeleting(true)
+    }
+
+    function closeNodal(){  // function to close the nodal page, used by the cancel and delete button
+        setIsDeleting(false)
+    }
+
+    function deleteComment(id){ // function to delete a comment
+        setUsercomments(prev => prev.filter(item => item.id !==id))
+    }
+
+    function deleteReply(id){
+        setUsercomments(prev =>{
+            const prevCopy = prev.map(commentItem =>{
+                const {replies} = commentItem
+                const repliesCopy = replies.filter(item => item.id !== id)
+                return(
+                    {
+                        ...commentItem,
+                        replies: repliesCopy
+                    }
+                )
+            })
+            return prevCopy
+        })
+    }
     
     const {content} = commentReply
     
@@ -77,11 +107,102 @@ function ContextProvider({children}) {
         })
     }
 
-    // function createDeepReply(event,newReply){
+    // function createDeepReply(id,newReply){
+    //     setUsercomments(prev => {
+    //         const prevCopy = prev.map(thisComment => {
+    //             const {replies} = thisComment
+    //             const _replies = replies.map(reply => {
 
+    //             })
+    //         })
+    //         return prevCopy
+    //     })
     // }
 
-    const values = {userComments,rootUser,profilePic,handleComment,createNewComment,content,createReply}
+    function upvoteComment(id){ // function to upvote a comment, used by the comment component
+        setUsercomments(prev => {
+            const prevCopy = prev.map(thisComment => {
+                return(
+                    thisComment.id === id ?
+                    {
+                        ...thisComment,
+                        score: thisComment.score + 1
+                    }: thisComment
+                )
+            })
+            return prevCopy
+        })
+    }
+    function downvoteComment(id){ // function to downvote a comment, used by the comment component
+        setUsercomments(prev => {
+            const prevCopy = prev.map(thisComment => {
+                return(
+                    thisComment.id === id ?
+                    {
+                        ...thisComment,
+                        score: thisComment.score - 1
+                    }: thisComment
+                )
+            })
+            return prevCopy
+        })
+    }
+
+    function upvoteReply(id){ // function to upvote a reply, used by the reply component
+        setUsercomments(prev => {
+            const prevCopy = prev.map(thisComment => {
+                const {replies} = thisComment
+                const _replies = replies.map(reply => {
+                    return(
+                        reply.id === id ?
+                        {
+                            ...reply,
+                            score: reply.score + 1
+                        }: reply
+                    )
+                })
+                return(
+                    {
+                        ...thisComment,
+                        replies: _replies
+                    }
+                )
+            })
+            return prevCopy
+        })
+    }
+
+    function downvoteReply(id){ // function to downvote a reply, used by the reply component
+        setUsercomments(prev => {
+            const prevCopy = prev.map(thisComment => {
+                const {replies} = thisComment
+                const _replies = replies.map(reply => {
+                    return(
+                        reply.id === id ?
+                        {
+                            ...reply,
+                            score: reply.score - 1
+                        }: reply
+                    )
+                })
+                return(
+                    {
+                        ...thisComment,
+                        replies: _replies
+                    }
+                )
+            })
+            return prevCopy
+        })
+    }
+
+    const values = 
+    {
+        userComments,rootUser,profilePic,handleComment,
+        createNewComment,content,createReply,isDeleting,
+        openNodal,closeNodal,deleteComment,deleteReply,upvoteComment,
+        downvoteComment,upvoteReply,downvoteReply
+    }
     return(
         <Context.Provider value={values}>
             {children}

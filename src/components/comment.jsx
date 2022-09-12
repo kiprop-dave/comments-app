@@ -7,6 +7,7 @@ import { Reply as ReplyCopy } from './textReply';
 import Button from './button';
 import { Context } from '../context/context';
 import {nanoid} from 'nanoid'
+import DeleteNodal from './deleteNodal';
 
 const ReplyDiv = styled(ReplyCopy) `
     /* margin-left: 5%; */
@@ -49,8 +50,14 @@ const ReplyWrapper = styled.div`
 `
 
 function Comment({comment}){
-    const {profilePic,rootUser,createReply} = useContext(Context)
+    const {profilePic,rootUser,createReply,deleteComment,upvoteComment,downvoteComment} = useContext(Context)
     const {content,createdAt,score,user,replies,showReply,id} = comment
+
+    const [modal,setModal] = useState(false)
+
+    function openModal(){
+        setModal(true)
+    }
 
     const [isShown, setIsShown] = useState(showReply)
 
@@ -110,8 +117,8 @@ function Comment({comment}){
         }
     }
 
-  
-
+    
+    
     const replyElements = replies.map((reply, index) =>(
         <Reply key={index} reply ={reply} commentId ={id}/>
     ))
@@ -119,17 +126,21 @@ function Comment({comment}){
     return(
         <CommentWrapper>
             <CommentContainer>
-                <Upvotes score={score}/>
+                <Upvotes score={score} upvote ={()=>upvoteComment(id)} downvote={()=>downvoteComment(id)}/>
                 <div className='commentdetails'>
-                    <CommentHead date ={createdAt} user={user} action={showReplyInput}/>
+                    <CommentHead date ={createdAt} user={user} action={showReplyInput} modal={openModal}/>
                     <Paragraph>{content}</Paragraph>
                 </div>
+                {
+                    modal &&
+                    <DeleteNodal deleteItem={()=> deleteComment(id)}/>
+                }
             </CommentContainer>
             <ReplyDiv replying={isShown}>
                         <img src={profilePic.png} alt="" className='profile'/>
                         <textarea className='textarea' value={commentReply.content}
                         name="content" onChange={(e) =>handleReplyInput(e)}/>
-                        <Button text={"REPLY"} action={hideReplyInput}/>
+                        <Button text={"REPLY"} action={hideReplyInput} margin={"1rem"}/>
                     </ReplyDiv>
             <ReplyWrapper>
                 <div className='vertical-line'></div>
