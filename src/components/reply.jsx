@@ -21,6 +21,11 @@ const ReplyContainer = styled.div `
     display: flex;
     margin-left: 2rem;
 
+    @media screen and (max-width:600px){
+        position: relative;
+        padding-bottom: 3.8rem;
+    }
+
     .details{
         display: flex;
         flex-direction: column;
@@ -82,6 +87,10 @@ export default function Reply({reply,commentId}){
     function openModal(){
         setModal(true)
     }
+
+    function closeModal(){
+        setModal(false)
+    }
     
     return(
         <>
@@ -96,7 +105,7 @@ export default function Reply({reply,commentId}){
             </div>
             {
                 modal &&
-                <DeleteNodal deleteItem={()=> deleteReply(id)}/>
+                <DeleteNodal deleteItem={()=> deleteReply(id)} modal={closeModal}/>
             }
         </ReplyContainer>
         <ReplyDiv replying ={isShown}>
@@ -104,7 +113,8 @@ export default function Reply({reply,commentId}){
             <textarea className='textarea'
             name='content' value={replyComment.content} onChange={(e)=>handleReplyText(e)}
             />
-            <Button text={"REPLY"} action={hideTextArea} margin={"1rem"}/>
+            <Button text={"REPLY"} action={hideTextArea} margin={"1rem"} 
+            bottom={"1rem"} right={"1rem"}/>
         </ReplyDiv>
         </>
     )

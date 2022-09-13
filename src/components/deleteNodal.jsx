@@ -26,22 +26,32 @@ const NodalContainer = styled.div `
     border-radius: 10px;
     opacity: 1;
 
+    @media screen and (max-width: 600px) {
+        width: 90%;
+        padding-bottom: 3rem;
+    }
+
     .buttons{
         display: flex;
         align-items: flex-start;
         align-self: flex-start;
         width: 100%;
+        
+
+        @media screen and (max-width: 600px){
+            position: relative;
+        }
        
     }
 `
 
-export default function DeleteNodal({deleteItem}){
+export default function DeleteNodal({deleteItem,modal}){
 
     const {closeNodal} = useContext(Context)
 
     function deleteSelected(){
         deleteItem()
-        closeNodal()
+        /* closeNodal() */
     }
     return(
         <>
@@ -55,8 +65,9 @@ export default function DeleteNodal({deleteItem}){
                     </p>
                 </div>
                 <div className='buttons'>
-                    <Button text={"No, CANCEL"} action={closeNodal} background={"hsl(211, 10%, 45%)"}/>
-                    <Button text={"YES, DELETE"} action={deleteSelected} margin={"2rem"} background={"hsl(358, 79%, 66%)"}/>
+                    <Button text={"No, CANCEL"} action={modal} background={"hsl(211, 10%, 45%)"}/>
+                    <Button text={"YES, DELETE"} action={deleteSelected} margin={"2rem"} background={"hsl(358, 79%, 66%)"}
+                    right={"1rem"}/>
                 </div>
             </NodalContainer>
         </NodalPage>

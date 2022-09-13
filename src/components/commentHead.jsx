@@ -6,6 +6,11 @@ const Header = styled.div `
     display: flex;
     align-items: center;
     position: relative;
+    
+
+    @media screen and (max-width:600px){
+        position: static;
+    }
 
     .profile{
         width: 2rem;
@@ -26,6 +31,12 @@ const Header = styled.div `
         width: 13%;
         justify-content: space-between;
         cursor: pointer;
+
+        @media screen and (max-width:600px){
+            bottom: 1rem;
+            right: 5%;
+            width: 4rem;
+        }
     }
     .reply:hover{
         opacity: 0.5;
@@ -55,6 +66,12 @@ const Reply = styled.div `
     display: flex;
     align-items: center;
     justify-content: space-between;
+    
+
+    @media screen and (max-width:600px){
+        bottom: 1.5rem;
+        right: 1rem;
+    }
 
     .delete{
         width: 50%;

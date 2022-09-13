@@ -11,17 +11,34 @@ export const Reply = styled.div `
     margin-top: 1rem;
     padding: 3%;
     
+
+    @media screen and (max-width: 600px) {
+        position: relative;
+    }
+    
     
     .textarea{
         width: 100%;
         margin-left: 1rem;
         font-family: 'Rubik', sans-serif;
         padding: 2%;
+        
+        @media screen and (max-width:600px){
+            position: absolute;
+            left: 2px;
+            width: 80%;
+            height: 35%;
+        }
     }
 
     .profile{
         width: 2rem;
         height: 2rem;
+
+        @media screen and (max-width:600px){
+            position: absolute;
+            bottom: 1rem;
+        }
     }
 `
 
@@ -35,7 +52,8 @@ export default function TextReply(){
             value={content}
             onChange={(e) => handleComment(e)}
             />
-            <Button text={"SEND"} action={createNewComment} margin={"1rem"}/>
+            <Button text={"SEND"} action={createNewComment} margin={"1rem"}
+            bottom={"1rem"} right={"1rem"}/>
        </Reply>
     )
 }

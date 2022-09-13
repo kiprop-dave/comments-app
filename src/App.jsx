@@ -2,7 +2,6 @@ import React, {useContext} from 'react';
 import './App.css'
 import styled from 'styled-components'
 import Comments from './components/comments'
-import DeleteNodal from './components/deleteNodal'
 import { Context } from './context/context';
 
 //styled component
@@ -14,12 +13,10 @@ const PageComponent = styled.div `
   flex-direction: column;
   align-items: center;
   z-index: -1;
+
 `
 
 function App() {
-  const {isDeleting} = useContext(Context)
-  
-
   return(
     <>
     <PageComponent>

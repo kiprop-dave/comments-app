@@ -18,16 +18,24 @@ const Dbutton = styled.button `
     font-family: 'Rubik', sans-serif;
     border-radius: 7px;
     cursor: pointer;
+    
+
+    @media screen and (max-width: 600px) {
+        position: absolute;
+        right: ${({right}) => right ? right : 'auto'};
+        bottom: ${({bottom}) => bottom ? bottom : 'auto'};
+        left: ${({left}) => left ? left : 'auto'};
+    }
 
     :hover{
         opacity: 0.5;
     }
 `
 
-export default function Button({text,action,margin, background}){
+export default function Button({text,action,margin, background,bottom,left,right}){
     return(
         <Dbutton margin ={margin} onClick={(e)=>action(e)}
-        background={background}>
+        background={background} bottom={bottom} left={left} right={right}>
             {text}
         </Dbutton>
     )

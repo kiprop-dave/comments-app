@@ -26,11 +26,23 @@ const CommentContainer = styled.div `
     margin-top: 1rem;
     display: flex;
 
+    @media screen and (max-width: 600px){
+        position: relative;
+        flex-direction:column;
+        min-height: 4rem;
+        padding: 3% 3% 3.8rem 3%;
+    }
+
     .commentdetails{
         display: flex;
         flex-direction: column;
         width: 100%;
         margin-left: 3%;
+        /* border: solid 1px; */
+
+       @media screen and (max-width:600px) {
+            margin-left: 0;
+       }
     }
 `
 const Paragraph = styled.p `
@@ -46,6 +58,10 @@ const ReplyWrapper = styled.div`
         height: auto;
         margin-left: 2rem;
         margin-top: 1rem;
+
+        @media screen and (max-width:600px){
+            margin-left: 0;
+        }
     }
 `
 
@@ -57,6 +73,10 @@ function Comment({comment}){
 
     function openModal(){
         setModal(true)
+    }
+
+    function closeModal(){
+        setModal(false)
     }
 
     const [isShown, setIsShown] = useState(showReply)
@@ -133,14 +153,15 @@ function Comment({comment}){
                 </div>
                 {
                     modal &&
-                    <DeleteNodal deleteItem={()=> deleteComment(id)}/>
+                    <DeleteNodal deleteItem={()=> deleteComment(id)} modal={closeModal}/>
                 }
             </CommentContainer>
             <ReplyDiv replying={isShown}>
                         <img src={profilePic.png} alt="" className='profile'/>
                         <textarea className='textarea' value={commentReply.content}
                         name="content" onChange={(e) =>handleReplyInput(e)}/>
-                        <Button text={"REPLY"} action={hideReplyInput} margin={"1rem"}/>
+                        <Button text={"REPLY"} action={hideReplyInput} margin={"1rem"}
+                        bottom={'1rem'} right={"1rem"}/>
                     </ReplyDiv>
             <ReplyWrapper>
                 <div className='vertical-line'></div>

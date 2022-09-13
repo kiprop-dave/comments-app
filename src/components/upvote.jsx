@@ -12,9 +12,25 @@ const VotesCount = styled.div `
     justify-content: space-between;
     border-radius: 10px;
 
+    @media screen and (max-width:600px){
+        padding: 0 2% 0 2%;
+    }
+
+    @media screen and (max-width:600px){
+        position: absolute;
+        bottom: 1rem;
+        width: 6rem;
+        height: 2.5rem;
+        flex-direction:row ;
+    }
+
     .votes{
         cursor: pointer;
         margin: 20%;
+
+        @media screen and (max-width:600px) {
+            margin: 0;
+        }
     }
 
     .score{
