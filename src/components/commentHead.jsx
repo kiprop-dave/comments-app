@@ -71,6 +71,7 @@ const Reply = styled.div `
     @media screen and (max-width:600px){
         bottom: 1.5rem;
         right: 1rem;
+        display: ${({display}) => display ? display : 'auto'};
     }
 
     .delete{
@@ -95,7 +96,7 @@ const Reply = styled.div `
     
 `
 
-export default function CommentHead({date,user,action,modal}){
+export default function CommentHead({date,user,action,modal,edit,display}){
     const {rootUser} = useContext(Context)
 
     const {image, username} = user
@@ -116,12 +117,12 @@ export default function CommentHead({date,user,action,modal}){
                     <img src={`/images/icon-reply.svg`} alt="reply" />
                     <Paragraph>Reply</Paragraph>
                 </div> :
-                <Reply>
-                    <div className='edit delete' onClick={() => modal()}>
+                <Reply display={display}>
+                    <div className='edit delete' onClick={() =>modal && modal()}>
                         <img src="/images/icon-delete.svg" alt="delete" />
                         <DeleteParagraph>Delete</DeleteParagraph>
                     </div>
-                    <div className='edit icon '>
+                    <div className='edit icon ' onClick={()=> edit && edit()}>
                         <img src="/images/icon-edit.svg" alt="edit" />
                         <Paragraph>Edit</Paragraph>
                     </div>

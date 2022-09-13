@@ -25,16 +25,6 @@ function ContextProvider({children}) {
         }
     )
 
-    const [isDeleting, setIsDeleting] = useState(false) // state for showing the delete nodal
-
-    function openNodal(){ // function to open the nodal page, used by the delete icon
-        setIsDeleting(true)
-    }
-
-    function closeNodal(){  // function to close the nodal page, used by the cancel and delete button
-        setIsDeleting(false)
-    }
-
     function deleteComment(id){ // function to delete a comment
         setUsercomments(prev => prev.filter(item => item.id !==id))
     }
@@ -107,17 +97,16 @@ function ContextProvider({children}) {
         })
     }
 
-    // function createDeepReply(id,newReply){
-    //     setUsercomments(prev => {
-    //         const prevCopy = prev.map(thisComment => {
-    //             const {replies} = thisComment
-    //             const _replies = replies.map(reply => {
-
-    //             })
-    //         })
-    //         return prevCopy
-    //     })
-    // }
+    function createDeepReply(event,id,newReply){
+        event.preventDefault()
+       const _userComments = [...userComments]
+       const questionIndex = _userComments.findIndex(item => item.replies.some(reply => reply.id === id))
+       const {replies} = _userComments[questionIndex]
+       const _replies = [...replies]
+       _replies.push(newReply)
+       _userComments[questionIndex].replies = _replies
+       setUsercomments(_userComments)
+    }
 
     function upvoteComment(id){ // function to upvote a comment, used by the comment component
         setUsercomments(prev => {
@@ -196,12 +185,27 @@ function ContextProvider({children}) {
         })
     }
 
+    function editComment(index,replacement){
+        const _userComments = [...userComments]
+        _userComments.splice(index,1,replacement)
+        setUsercomments(_userComments)
+    }
+
+    function editReply(id,index,replacement){
+        const _userComments = [...userComments]
+        const commentIndex = _userComments.findIndex(comment => comment.replies.some(reply => reply.id === id)) // find index of question with reply
+        const {replies} = _userComments[commentIndex]
+        const _replies = [...replies]
+        _replies.splice(index,1,replacement)
+        _userComments[commentIndex].replies = _replies
+        setUsercomments(_userComments)
+    }
+
     const values = 
     {
         userComments,rootUser,profilePic,handleComment,
-        createNewComment,content,createReply,isDeleting,
-        openNodal,closeNodal,deleteComment,deleteReply,upvoteComment,
-        downvoteComment,upvoteReply,downvoteReply
+        createNewComment,content,createReply,deleteComment,deleteReply,upvoteComment,
+        downvoteComment,upvoteReply,downvoteReply, editComment,createDeepReply,editReply
     }
     return(
         <Context.Provider value={values}>

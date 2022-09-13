@@ -26,7 +26,7 @@ function Comments(){
     const {userComments} = useContext(Context)
 
     const commentElements = userComments.map((comment,index) =>(
-        <Comment key ={index} comment = {comment}/>
+        <Comment key ={index} comment = {comment} index={index}/>
     ))
 
     return(

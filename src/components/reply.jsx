@@ -1,4 +1,4 @@
-import React,{useContext,useState} from 'react';
+import React,{useContext,useState, useEffect} from 'react';
 import Upvotes from './upvote';
 import CommentHead from './commentHead';
 import styled from 'styled-components';
@@ -7,10 +7,14 @@ import { Context } from '../context/context';
 import Button from './button';
 import {nanoid} from 'nanoid'
 import DeleteNodal from './deleteNodal';
+import EditComment from './editComment';
 
 const ReplyDiv = styled(ReplyCopy) `
     margin-left: 5%;
     display: ${({replying})=> replying ? "auto" : "none"};
+`
+const ReplyWrapper = styled.div `
+    margin-left: 2rem;
 `
 
 const ReplyContainer = styled.div `
@@ -18,8 +22,7 @@ const ReplyContainer = styled.div `
     border-radius: 10px;
     padding: 3%;
     margin-top: 1rem;
-    display: flex;
-    margin-left: 2rem;
+    display: ${({editing}) => editing ? 'none' : 'flex'};
 
     @media screen and (max-width:600px){
         position: relative;
@@ -43,8 +46,9 @@ const Paragraph = styled.p `
     }
 `
 
-export default function Reply({reply,commentId}){
-    const {profilePic,rootUser,createReply,deleteReply,upvoteReply,downvoteReply} = useContext(Context)
+export default function Reply({reply,index}){
+    const {profilePic,rootUser,createReply,deleteReply,upvoteReply,downvoteReply,
+    createDeepReply} = useContext(Context)
     const {content,createdAt,score,replyingTo,user,showReply,id} = reply
     const [isShown, setIsShown] = useState(showReply)
     const [replyComment, setReplyComment] = useState(
@@ -64,6 +68,46 @@ export default function Reply({reply,commentId}){
             "showReply": false
         }
     )
+    const [replyCopy, setReplyCopy] = useState({})
+    
+    useEffect(()=>{
+        setReplyCopy(reply)
+    },[reply])
+
+    function editReply(event){
+        const {name, value} = event.target
+        setReplyCopy(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+
+    const [isEditing, setIsEditing] = useState(false)
+    
+    function startEditing(){
+        setIsEditing(true)
+    }
+
+    function finishEdit(){
+        setIsEditing(false)
+    }
+
+    const [voteCount, setVoteCount] = useState(0)
+
+    function addVote(){
+        if(voteCount < 1){
+            upvoteReply(id)
+            setVoteCount(prev => prev + 1)
+        }
+    }
+
+    function subVote(){
+        if(voteCount > -1){
+            downvoteReply(id)
+            setVoteCount(prev => prev - 1)
+        }
+    }
 
     function showTextArea(){
         setIsShown(true)
@@ -71,7 +115,7 @@ export default function Reply({reply,commentId}){
     // console.log(id)
     function hideTextArea(event){ // Not working yet
         if(replyComment.content.length > 0){
-            createReply(event,id,replyComment)
+            createDeepReply(event,id,replyComment)
             setIsShown(false)
         }
     }
@@ -94,28 +138,36 @@ export default function Reply({reply,commentId}){
     
     return(
         <>
-        <ReplyContainer>
-            <Upvotes score={score} upvote={()=>upvoteReply(id)} downvote={()=>downvoteReply(id)}/>
-            <div className='details'>
-                <CommentHead user={user} date={createdAt} action={showTextArea} modal={openModal}/>
-                <Paragraph>
-                    <span className='reply'>@{replyingTo} </span>
-                    {content}    
-                </Paragraph>
-            </div>
+        <ReplyWrapper>
+            <ReplyContainer editing ={isEditing}>
+                <Upvotes score={score} upvote={()=>addVote()} downvote={()=>subVote()}/>
+                <div className='details'>
+                    <CommentHead user={user} date={createdAt} action={showTextArea} modal={openModal}
+                    edit={startEditing}/>
+                    <Paragraph>
+                        <span className='reply'>@{replyingTo} </span>
+                        {content}    
+                    </Paragraph>
+                </div>
+                {
+                    modal &&
+                    <DeleteNodal deleteItem={()=> deleteReply(id)} modal={closeModal}/>
+                }
+            </ReplyContainer>
             {
-                modal &&
-                <DeleteNodal deleteItem={()=> deleteReply(id)} modal={closeModal}/>
+                isEditing &&
+                <EditComment comment={replyCopy} finishEdit={finishEdit} index={index}
+                editAction={editReply} id={id}/>
             }
-        </ReplyContainer>
-        <ReplyDiv replying ={isShown}>
-            <img src={profilePic.png} alt="" className='profile'/>
-            <textarea className='textarea'
-            name='content' value={replyComment.content} onChange={(e)=>handleReplyText(e)}
-            />
-            <Button text={"REPLY"} action={hideTextArea} margin={"1rem"} 
-            bottom={"1rem"} right={"1rem"}/>
-        </ReplyDiv>
+            <ReplyDiv replying ={isShown}>
+                <img src={profilePic.png} alt="" className='profile'/>
+                <textarea className='textarea'
+                name='content' value={replyComment.content} onChange={(e)=>handleReplyText(e)}
+                />
+                <Button text={"REPLY"} action={hideTextArea} margin={"1rem"} 
+                bottom={"1rem"} right={"1rem"}/>
+            </ReplyDiv>
+        </ReplyWrapper>
         </>
     )
 }

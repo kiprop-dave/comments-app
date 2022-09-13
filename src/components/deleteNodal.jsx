@@ -27,7 +27,7 @@ const NodalContainer = styled.div `
     opacity: 1;
 
     @media screen and (max-width: 600px) {
-        width: 90%;
+        width: 80%;
         padding-bottom: 3rem;
     }
 

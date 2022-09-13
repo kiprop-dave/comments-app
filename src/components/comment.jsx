@@ -1,4 +1,4 @@
-import React,{useContext, useState} from 'react';
+import React,{useContext, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import Upvotes from './upvote';
 import CommentHead from './commentHead';
@@ -8,9 +8,9 @@ import Button from './button';
 import { Context } from '../context/context';
 import {nanoid} from 'nanoid'
 import DeleteNodal from './deleteNodal';
+import EditComment from './editComment';
 
 const ReplyDiv = styled(ReplyCopy) `
-    /* margin-left: 5%; */
     display: ${({replying})=> replying ? "auto" : "none"};
 `
 
@@ -24,7 +24,7 @@ const CommentContainer = styled.div `
     padding: 3%;
     min-height: 8rem;
     margin-top: 1rem;
-    display: flex;
+    display: ${({editing}) => editing ? 'none' : 'flex'};
 
     @media screen and (max-width: 600px){
         position: relative;
@@ -65,9 +65,27 @@ const ReplyWrapper = styled.div`
     }
 `
 
-function Comment({comment}){
+function Comment({comment,index}){
+
     const {profilePic,rootUser,createReply,deleteComment,upvoteComment,downvoteComment} = useContext(Context)
     const {content,createdAt,score,user,replies,showReply,id} = comment
+
+    const [commentCopy, setCommentCopy] = useState({}) //state for editing the comment
+
+    function commentEdit(event){ // function to update the comment
+        const {name,value} = event.target
+        setCommentCopy(prev => ({
+            ...prev,
+            [name]: value
+        }))
+        
+    }
+
+    useEffect(()=>{
+        setCommentCopy(comment)
+    },[comment])
+    
+    const [voteCount, setVoteCount] = useState(0) // This trecks the upvotes and downvotes so that you can only upvote/downvote once 
 
     const [modal,setModal] = useState(false)
 
@@ -137,18 +155,43 @@ function Comment({comment}){
         }
     }
 
-    
+    function addVote(){ // function to upvote comment
+        if(voteCount < 1){
+            upvoteComment(id)
+            setVoteCount(prev => prev + 1)
+        }
+    }
+
+    function subVote(){  // function to downvote comment
+        if(voteCount > -1){
+            downvoteComment(id)
+            setVoteCount(prev => prev - 1)
+        }
+    }
+
+    //state for editing the comment
+    const [isEditing, setIsEditing] = useState(false)
+
+    //function to show the edit element
+    function editComment(){
+        setIsEditing(true)
+    }
+
+    //function to remove edit element
+    function finishEdit(){
+        setIsEditing(false)
+    }
     
     const replyElements = replies.map((reply, index) =>(
-        <Reply key={index} reply ={reply} commentId ={id}/>
+        <Reply key={index} reply ={reply} index={index}/>
     ))
-
+    // console.log(score)
     return(
         <CommentWrapper>
-            <CommentContainer>
-                <Upvotes score={score} upvote ={()=>upvoteComment(id)} downvote={()=>downvoteComment(id)}/>
+            <CommentContainer editing={isEditing}>
+                <Upvotes score={score} upvote ={()=>addVote()} downvote={()=>subVote()}/>
                 <div className='commentdetails'>
-                    <CommentHead date ={createdAt} user={user} action={showReplyInput} modal={openModal}/>
+                    <CommentHead date ={createdAt} user={user} action={showReplyInput} modal={openModal} edit={editComment}/>
                     <Paragraph>{content}</Paragraph>
                 </div>
                 {
@@ -157,12 +200,17 @@ function Comment({comment}){
                 }
             </CommentContainer>
             <ReplyDiv replying={isShown}>
-                        <img src={profilePic.png} alt="" className='profile'/>
-                        <textarea className='textarea' value={commentReply.content}
-                        name="content" onChange={(e) =>handleReplyInput(e)}/>
-                        <Button text={"REPLY"} action={hideReplyInput} margin={"1rem"}
-                        bottom={'1rem'} right={"1rem"}/>
-                    </ReplyDiv>
+                    <img src={profilePic.png} alt="" className='profile'/>
+                    <textarea className='textarea' value={commentReply.content}
+                    name="content" onChange={(e) =>handleReplyInput(e)}/>
+                    <Button text={"REPLY"} action={hideReplyInput} margin={"1rem"}
+                    bottom={'1rem'} right={"1rem"}/>
+            </ReplyDiv>
+            {
+                isEditing &&
+                <EditComment finishEdit={finishEdit} comment={commentCopy} index={index}
+                editAction={commentEdit}/>
+            }
             <ReplyWrapper>
                 <div className='vertical-line'></div>
                 <div style={{width: "100%"}}>
