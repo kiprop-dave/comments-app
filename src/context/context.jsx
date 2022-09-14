@@ -1,4 +1,4 @@
-import React,{useState, createContext} from 'react';
+import React,{useState, createContext, useEffect} from 'react';
 import localJson from '../utils/data.json'
 import {nanoid} from 'nanoid'
 
@@ -7,7 +7,8 @@ const {comments, currentUser} = localJson
 
 function ContextProvider({children}) {
     const {username : rootUser , image : profilePic} = currentUser
-    const [userComments, setUsercomments] = useState(comments)
+    const [userComments, setUsercomments] = useState(
+        ()=>JSON.parse(localStorage.getItem('comments')) ||comments)
     const [commentReply, setCommentReply] = useState(
         {
             "id": nanoid(),
@@ -24,6 +25,12 @@ function ContextProvider({children}) {
             "replies": []
         }
     )
+
+    //local storage
+    useEffect(()=>{
+        localStorage.setItem('comments', JSON.stringify(userComments))
+    },[userComments])
+
 
     function deleteComment(id){ // function to delete a comment
         setUsercomments(prev => prev.filter(item => item.id !==id))

@@ -2,11 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Dbutton = styled.button `
-    /* background-color: hsl(238, 40%, 52%); */
     background-color: ${({background}) => background ? background : "hsl(238, 40%, 52%)"};
     border: none;
-    /* width: 5rem; */
-    /* width: fit-content; */
     min-width: 10%;
     padding: 3% 5% 3% 5%;
     height: 2rem;
@@ -28,7 +25,7 @@ const Dbutton = styled.button `
         left: ${({left}) => left ? left : 'auto'};
     }
 
-    :hover{
+    &:hover{
         opacity: 0.5;
     }
 `

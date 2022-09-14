@@ -15,7 +15,7 @@ const EditContainer = styled.div `
     border: solid 1px;
 
     @media screen and (max-width: 600px) {
-        position: relative;
+        position: static;
     }
     
     .textarea{
@@ -37,6 +37,11 @@ const EditContainer = styled.div `
         position: absolute;
         right: 0;
         bottom: 0;
+
+        @media screen and (max-width: 600px) {
+            position: relative;
+            margin-top: 3rem;
+        }
         
     }
 `
@@ -65,7 +70,7 @@ function EditComment({comment,finishEdit,index,editAction,id}){
                 onChange={(e)=>editAction(e)} name="content"/>
                 <div className='button-update'>
                     <Button action={replaceComment} text={"UPDATE"} 
-                    bottom={"0.5rem"} right={"0"}/>
+                    bottom={"0"} right={"0"}/>
                 </div>
             </div>
         </EditContainer>
