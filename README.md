@@ -37,8 +37,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [here](https://www.frontendmentor.io/challenges/interactive-comments-section-iG1RugEG9/hub/mobile-first-interactive-comments-section-using-react-7dZcYWJlJJ)
+- Live Site URL: [here](https://comments-rcspyhp4z-kiprop-dave.vercel.app/)
 
 ## My process
 
