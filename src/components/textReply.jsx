@@ -43,14 +43,14 @@ export const Reply = styled.div `
 `
 
 export default function TextReply(){
-    const {profilePic,handleComment,createNewComment,content} = useContext(Context)
+    const {profilePic,handleComment,createNewComment,content,trimText} = useContext(Context)
 
     return(
        <Reply>
             <img src={profilePic.png} alt="dp" className='profile'/>
             <textarea placeholder='Add a comment' className='textarea' name='content'
             value={content}
-            onChange={(e) => handleComment(e)}
+            onChange={(e) => handleComment(e)} onBlur={()=>trimText()}
             />
             <Button text={"SEND"} action={createNewComment} margin={"1rem"}
             bottom={"1rem"} right={"1rem"}/>

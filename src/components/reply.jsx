@@ -82,6 +82,13 @@ export default function Reply({reply,index}){
         }))
     }
 
+    const trimReplyCopy = () => {
+        setReplyCopy(prev => ({
+            ...prev,
+            content: prev.content.trim()
+        }))
+    }
+
 
     const [isEditing, setIsEditing] = useState(false)
     
@@ -117,6 +124,8 @@ export default function Reply({reply,index}){
         if(replyComment.content.length > 0){
             createDeepReply(event,id,replyComment)
             setIsShown(false)
+        }else{
+            setIsShown(false)
         }
     }
     
@@ -127,6 +136,14 @@ export default function Reply({reply,index}){
             [name]: value
         }))
     }
+
+    const trimReply =() =>{
+        setReplyComment(prev => ({
+            ...prev,
+            content: prev.content.trim()
+        }))
+    }
+
     const [modal, setModal] = useState(false)
     function openModal(){
         setModal(true)
@@ -157,13 +174,13 @@ export default function Reply({reply,index}){
             {
                 isEditing &&
                 <EditComment comment={replyCopy} finishEdit={finishEdit} index={index}
-                editAction={editReply} id={id}/>
+                editAction={editReply} id={id} trim={trimReplyCopy}/>
             }
             <ReplyDiv replying ={isShown}>
                 <img src={profilePic.png} alt="" className='profile'/>
                 <textarea className='textarea'
                 name='content' value={replyComment.content} onChange={(e)=>handleReplyText(e)}
-                />
+                onBlur={()=>trimReply()}/>
                 <Button text={"REPLY"} action={hideTextArea} margin={"1rem"} 
                 bottom={"1rem"} right={"1rem"}/>
             </ReplyDiv>

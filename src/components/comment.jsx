@@ -81,6 +81,13 @@ function Comment({comment,index}){
         
     }
 
+    const trimReplyCopy = () =>{ // trim edited comment reply
+        setCommentCopy(prev => ({
+            ...prev,
+            content: prev.content.trim()
+        }))
+    }
+
     useEffect(()=>{
         setCommentCopy(comment)
     },[comment])
@@ -129,7 +136,16 @@ function Comment({comment,index}){
         setIsShown(true)
     }
 
+   const trimReply = ()=>{ // Trims whitespaces
+    setCommentReply(prev => ({
+        ...prev,
+        content: prev.content.trim()
+    }))
+   }
+
     const hideReplyInput = (event)=>{
+        
+
         if(commentReply.content.length > 0){
             createReply(event,id,commentReply)
             setIsShown(false)
@@ -202,14 +218,14 @@ function Comment({comment,index}){
             <ReplyDiv replying={isShown}>
                     <img src={profilePic.png} alt="" className='profile'/>
                     <textarea className='textarea' value={commentReply.content}
-                    name="content" onChange={(e) =>handleReplyInput(e)}/>
+                    name="content" onChange={(e) =>handleReplyInput(e)} onBlur={()=>trimReply()}/>
                     <Button text={"REPLY"} action={hideReplyInput} margin={"1rem"}
                     bottom={'1rem'} right={"1rem"}/>
             </ReplyDiv>
             {
                 isEditing &&
                 <EditComment finishEdit={finishEdit} comment={commentCopy} index={index}
-                editAction={commentEdit}/>
+                editAction={commentEdit} trim={trimReplyCopy}/>
             }
             <ReplyWrapper>
                 <div className='vertical-line'></div>

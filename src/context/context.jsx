@@ -62,14 +62,26 @@ function ContextProvider({children}) {
         }))
     }
 
+    const trimText = () => {
+        setCommentReply(prev => ({
+            ...prev,
+            content: prev.content.trim()
+        }))
+    }
+
     function createNewComment(){
-        setUsercomments(prev => {
-            if(commentReply.content.length > 0){
-                return [...prev, commentReply]
-            }else{
-                return prev
-            }
-        })
+
+        // setUsercomments(prev => {
+        //     if(commentReply.content.length > 0){
+        //         return [...prev, commentReply]
+        //     }else{
+        //         return prev
+        //     }
+        // })
+        if(commentReply.content.length > 0){
+            setUsercomments(prev => [...prev, commentReply])
+        }
+
         setCommentReply(
             {
                 "id": nanoid(),
@@ -212,7 +224,8 @@ function ContextProvider({children}) {
     {
         userComments,rootUser,profilePic,handleComment,
         createNewComment,content,createReply,deleteComment,deleteReply,upvoteComment,
-        downvoteComment,upvoteReply,downvoteReply, editComment,createDeepReply,editReply
+        downvoteComment,upvoteReply,downvoteReply, editComment,createDeepReply,editReply,
+        trimText
     }
     return(
         <Context.Provider value={values}>

@@ -46,7 +46,7 @@ const EditContainer = styled.div `
     }
 `
 
-function EditComment({comment,finishEdit,index,editAction,id}){
+function EditComment({comment,finishEdit,index,editAction,id,trim}){
     const {editComment, editReply} = useContext(Context)
     const {user,createdAt,content,score} = comment
 
@@ -67,7 +67,7 @@ function EditComment({comment,finishEdit,index,editAction,id}){
             <div className='container'>
                 <CommentHead user={user} date={createdAt} display={'none'}/>
                 <textarea className='textarea' defaultValue={content}
-                onChange={(e)=>editAction(e)} name="content"/>
+                onChange={(e)=>editAction(e)} name="content" onBlur={()=>trim()}/>
                 <div className='button-update'>
                     <Button action={replaceComment} text={"UPDATE"} 
                     bottom={"0"} right={"0"}/>

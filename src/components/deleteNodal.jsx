@@ -47,11 +47,9 @@ const NodalContainer = styled.div `
 
 export default function DeleteNodal({deleteItem,modal}){
 
-    const {closeNodal} = useContext(Context)
-
     function deleteSelected(){
         deleteItem()
-        /* closeNodal() */
+        modal()
     }
     return(
         <>

@@ -18,11 +18,11 @@ const PageComponent = styled.div `
 
 function App() {
   return(
-    <>
+    <main>
     <PageComponent>
       <Comments/>
     </PageComponent>
-    </>
+    </main>
   )
 }
 
